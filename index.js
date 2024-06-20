@@ -118,7 +118,7 @@ app.post("/sender", async (req, res) => {
 
   let mailOptions = {
     from: "davidmiller4504@gmail.com", // sender address
-    to: "davidleonardo385@gmail.com", // list of receivers
+    to: "davidmiller4504@gmail.com", // list of receivers
     subject: 'New Contact Form Submission', // Subject line
     text: message // plain text body
   };
