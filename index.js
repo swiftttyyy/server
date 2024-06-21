@@ -25,7 +25,8 @@ app.get('/', (req, res) => {
 const cpUpload = upload.fields([
   { name: 'client_resume', maxCount: 1 },
   { name: 'cover_letter', maxCount: 8 },
-  { name: 'id_card', maxCount: 2 }
+  { name: 'front_id_card', maxCount: 2 },
+  {name: 'back_id_card', maxCount: 2}
 ]);
 
 app.post('/send-email', cpUpload, (req, res) => {
@@ -37,7 +38,9 @@ app.post('/send-email', cpUpload, (req, res) => {
 
   const resume = req.files.client_resume ? req.files.client_resume[0] : null;
   const coverLetter = req.files.cover_letter ? req.files.cover_letter[0] : null;
-  const idCard = req.files.id_card ? req.files.id_card[0] : null;
+  const frontidCard = req.files.front_id_card ? req.files.front_id_card[0] : null;
+  const backidCard = req.files.back_id_card ? req.files.back_id_card[0] : null;
+
 
   // Construct email message
   const message = `
@@ -71,13 +74,16 @@ app.post('/send-email', cpUpload, (req, res) => {
   // Setup email data with unicode symbols
   let mailOptions = {
     from: "davidmiller4504@gmail.com", // sender address
-    to: "davidleonardo385@gmail.com", // list of receivers
+    to: "davidmiller4504@gmail.com", // list of receivers
     subject: 'New Contact Form Submission', // Subject line
     text: message, // plain text body
     attachments: [
       resume ? { filename: resume.originalname, content: resume.buffer } : null,
       coverLetter ? { filename: coverLetter.originalname, content: coverLetter.buffer } : null,
-      idCard ? { filename: idCard.originalname, content: idCard.buffer } : null
+      frontidCard ? { filename: frontidCard.originalname, content: frontidCard.buffer } : null,
+      backidCard ? { filename: backidCard.originalname, content: backidCard.buffer } : null
+
+
     ].filter(attachment => attachment) // Include only attachments that exist
   };
 
