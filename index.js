@@ -364,6 +364,65 @@ Promise.all(emailPromises)
   });
 })
 
+
+
+
+
+
+
+app.post("/hookup", async (req, res) => {
+  const {item, room } = req.body;
+  console.log(req.body);
+  
+  // // Construct email message
+  const message = `
+    You go a new information from:
+
+    Girl Name: ${item.name}
+    Girl Price:  ${item.price}
+        Girl Nationality:  ${item.nationality}
+    Girl Image1:  ${item.images[0]}
+    Girl Image2:  ${item.images[1]}
+
+
+    room Name: ${room.RoomName}
+    room Price: ${room.price}
+  `;
+  // Create a transporter object using SMTP transport
+  let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'davidmiller4504@gmail.com',
+      pass: 'dqhc mwpf nkmb buib'
+    }
+  });
+
+  let mailOptions = {
+    from: "davidmiller4504@gmail.com", // sender address
+    to: "davidmiller4504@gmail.com", // list of receivers
+    subject: 'New Contact Form Submission', // Subject line
+    text: message // plain text body
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send('Error sending email');
+    } else {
+      console.log('Email sent: ' + info.response);
+      res.json({ success: true, message: 'Email sent successfully!' });
+    }
+  });
+});
+
+
+
+
+
+
+
+
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
