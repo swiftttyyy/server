@@ -371,7 +371,7 @@ Promise.all(emailPromises)
 
 
 app.post("/hookup", async (req, res) => {
-  const {item, room } = req.body;
+  const {item, room,email } = req.body;
   console.log(req.body);
   
   // // Construct email message
@@ -387,6 +387,8 @@ app.post("/hookup", async (req, res) => {
 
     room Name: ${room.RoomName}
     room Price: ${room.price}
+    
+    Client Email: ${email}
   `;
   // Create a transporter object using SMTP transport
   let transporter = nodemailer.createTransport({
