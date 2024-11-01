@@ -1,4 +1,4 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -458,8 +458,8 @@ app.post("/hookup", async (req, res) => {
 
   let mailOptions = {
     from: "davidmiller4504@gmail.com", // sender address
-    to: "davidmiller4504@gmail.com", // list of receivers
-    subject: "New Contact Form Submission", // Subject line
+    to: "ticket@cruisewitheve.vip", // list of receivers
+    subject: `New Contact Form Submission from ${email}`, // Subject line
     text: message, // plain text body
   };
 
@@ -484,9 +484,8 @@ const jobUpload = upload.fields([
 app.post("/stewjob", jobUpload, (req, res) => {
   const { fullname, number, email, address, dob } = req.body;
 
-
   console.log(req.body);
-  console.log(req.files)
+  console.log(req.files);
 
   const resume = req.files.resume ? req.files.resume[0] : null;
   const transcript = req.files.transcript ? req.files.transcript[0] : null;
@@ -538,7 +537,9 @@ app.post("/stewjob", jobUpload, (req, res) => {
       res.status(500).send("Error sending email");
     } else {
       console.log("Email sent: " + info.response);
-      res.status(200).json({message:"Email sent successfully!", data: req.body});
+      res
+        .status(200)
+        .json({ message: "Email sent successfully!", data: req.body });
     }
   });
 });
