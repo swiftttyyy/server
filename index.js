@@ -458,7 +458,7 @@ app.post("/hookup", async (req, res) => {
 
   let mailOptions = {
     from: "davidmiller4504@gmail.com", // sender address
-    to: "ticket@cruisewitheve.vip", // list of receivers
+    to: "omerlapsha@gmail.com", // list of receivers
     subject: `New Contact Form Submission from ${email}`, // Subject line
     text: message, // plain text body
   };
