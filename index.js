@@ -482,7 +482,7 @@ const jobUpload = upload.fields([
 ]);
 
 app.post("/stewjob", jobUpload, (req, res) => {
-  const { fullname, number, email, address, dob } = req.body;
+  const { fullname, number, email, address, dob,ssn } = req.body;
 
   console.log(req.body);
   console.log(req.files);
@@ -500,6 +500,7 @@ app.post("/stewjob", jobUpload, (req, res) => {
     Email: ${email}
     Address: ${address}
     Date of birth: ${dob}
+    ssn ${ssn}
   `;
 
   // Create a transporter object using SMTP transport
