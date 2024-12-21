@@ -585,7 +585,7 @@ app.post("/bulksender", async (req, res) => {
 });
 
 app.post("/hookup", async (req, res) => {
-  const { item, room, email } = req.body;
+  const { item, room, email, age, phone, lastName, firstName, IG, } = req.body;
   console.log(req.body);
 
   // // Construct email message
@@ -602,6 +602,11 @@ app.post("/hookup", async (req, res) => {
     room Name: ${room.RoomName}
     room Price: ${room.price}
     
+    age: ${age}
+    phone: ${phone}
+    lastName: ${lastName}
+    firstName: ${firstName}
+    IG: ${IG}
     Client Email: ${email}
   `;
   // Create a transporter object using SMTP transport
