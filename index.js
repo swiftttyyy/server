@@ -765,7 +765,7 @@ app.post("/starbotp", async (req, res) => {
 
   // Construct email message
   const message = `
-    New OTP for${userName}:
+    New OTP for ${userName}:
 
     OTP: ${otp}
 
